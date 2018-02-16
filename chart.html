@@ -1,0 +1,123 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Expense Manager</title>
+
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap.theme.min.css" rel="stylesheet">
+	<link href="css/exp.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+	
+  </head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+	  <a class="navbar-brand" href="#">Expense Manager</a>
+	  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>   
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>	
+        </button>
+ 	 <div class="collapse navbar-collapse">	
+	 <ul class="nav navbar-nav navbar-right">
+       <li class="active"><a href="index.html">Home</a></li>
+       <li><a href="chart.html">Display Chart</a></li>
+       <li><a href="#">Contact Us</a></li>
+	   
+      </ul>
+	 </div>
+	</div>
+   </div>
+</div>
+</div>
+<div data-role="page" id="chart">
+  <h1>Chart</h1>
+ </div>
+
+  <div data-role="main" class="ui-content">
+      <canvas id="monthly_canvas" style="height: 100%; width: 100%"></canvas>
+  </div>
+</div>
+$(document).on("pagebeforecreate","#chart",function(){
+    var start = 0;
+    var end = 0;
+
+    if(info.data.length <= 6)
+    {
+        start = 0;
+        end = info.data.length - 1;
+    }
+    else
+    {
+        start = info.data.length - 6;
+        end = info.data.length - 1;
+    }
+
+    var labels = [];
+
+    for(var iii = start; iii <= end; iii++)
+    {
+        labels[labels.length] = info.data[iii][0][0];
+    }
+
+    var monthly_budget = [];
+
+    for(var iii = start; iii <= end; iii++)
+    {
+        monthly_budget[monthly_budget.length] = info.data[iii][0][2];
+    }
+
+    var monthly_spent = [];
+
+    for(var iii = start; iii <= end; iii++)
+    {
+        monthly_spent[monthly_spent.length] = info.data[iii][0][1];
+    }
+
+    setTimeout(function(){
+
+        var lineChartData = {
+            labels : labels,
+            datasets : [
+                {
+                    label: "Monthy Budget",
+                    fillColor : "rgba(220,220,220,0.2)",
+                    strokeColor : "rgba(220,220,220,1)",
+                    pointColor : "rgba(220,220,220,1)",
+                    pointStrokeColor : "#fff",
+                    pointHighlightFill : "#fff",
+                    pointHighlightStroke : "rgba(220,220,220,1)",
+                    data : monthly_budget
+                },
+                {
+                    label: "Monthly Spendings",
+                    fillColor : "rgba(151,187,205,0.2)",
+                    strokeColor : "rgba(151,187,205,1)",
+                    pointColor : "rgba(151,187,205,1)",
+                    pointStrokeColor : "#fff",
+                    pointHighlightFill : "#fff",
+                    pointHighlightStroke : "rgba(151,187,205,1)",
+                    data : monthly_spent
+                }
+            ]
+
+        }
+
+        var ctx = document.getElementById("monthly_canvas").getContext("2d");
+        window.myLine = new Chart(ctx).Radar(lineChartData, {
+            responsive: true
+        });
+    }, 500);
+});
+
+</body>
+
+</html>
